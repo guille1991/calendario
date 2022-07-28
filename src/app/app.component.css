@@ -1,0 +1,56 @@
+ol {
+  list-style: none;
+  display: inline-grid;
+  grid-template-columns: repeat(7, 3rem);
+
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+li {
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.day-name {
+  font-weight: bold;
+  text-align: center;
+  color: gray;
+}
+
+.calendario {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.contenedor-mes {
+  display: flex;
+  flex-direction: column;
+}
+
+div {
+  text-align: center;
+  display: flex;
+}
+
+.bloqueado {
+  color: lightgray;
+  cursor: default;
+}
+
+.disponible {
+  color: blue;
+}
+
+.seleccionado {
+  background-color: lightgreen;
+}
+
+.error {
+  background-color: red !important;
+}
