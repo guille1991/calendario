@@ -28,6 +28,7 @@ li {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  height: 5rem;
 }
 .calendario {
   display: flex;
