@@ -1,7 +1,5 @@
  <div class="info">
-  <h2 *ngIf="diasDesde && !diasHasta">El {{ diasDesde |
-    date: 'dd/MM/yyyy' }}, <span *ngIf="cantidadDias != 0">{{cantidadDias}}
-      {{texto}}.</span></h2>
+
   <h2 *ngIf="diasDesde && diasHasta">Desde el {{ diasDesde |
     date: 'dd/MM/yyyy' }}
     hasta el {{diasHasta | date:
@@ -9,6 +7,7 @@
       {{texto}}.</span></h2>
 
 </div>
+
 <div
   class="calendario">
   <div class="contenedor-mes" *ngFor="let item of calendar |
@@ -44,5 +43,12 @@
     </ol>
   </div>
 
+  <div class="info">
 
-</div>
+    <h2 *ngIf="diasDesde && diasHasta">Desde el {{ diasDesde |
+      date: 'dd/MM/yyyy' }}
+      hasta el {{diasHasta | date:
+      'dd/MM/yyyy'}}, <span *ngIf="cantidadDias != 0">{{cantidadDias}}
+        {{texto}}.</span></h2>
+
+  </div>

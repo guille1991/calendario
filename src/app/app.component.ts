@@ -70,13 +70,16 @@ export class AppComponent implements OnInit {
         ? (this.diasHasta = dayjs(e.hasta))
         : (this.diasHasta = null);
 
-      if (e.desde != null && e.hasta == null) {
-        this.cantidadDias = 1;
-        this.texto = 'día';
-      } else if (e.desde != null && e.hasta != null) {
-        this.cantidadDias =
-          dayjs(this.diasHasta).diff(dayjs(this.diasDesde), 'day') + 1;
-        this.texto = 'días';
+      if (e.desde != null && e.hasta != null) {
+        this.cantidadDias = dayjs(this.diasHasta).diff(
+          dayjs(this.diasDesde),
+          'day'
+        );
+        if (this.cantidadDias == 1) {
+          this.texto = 'noche';
+        } else {
+          this.texto = 'noches';
+        }
       } else {
         this.cantidadDias = 0;
       }
