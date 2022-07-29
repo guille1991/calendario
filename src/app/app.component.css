@@ -4,6 +4,7 @@ ol {
   grid-template-columns: repeat(7, 3rem);
 
   padding: 0;
+  margin: 0;
   align-items: center;
   justify-content: center;
 }
@@ -20,17 +21,28 @@ li {
   font-weight: bold;
   text-align: center;
   color: gray;
+  cursor: default;
 }
 
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .calendario {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
+  align-content: center;
+  gap: 1rem;
+  /* height: 100vh; */
 }
 
 .contenedor-mes {
+  height: 400px;
   display: flex;
   flex-direction: column;
+  /* border: 1px solid black; */
 }
 
 div {
@@ -53,4 +65,12 @@ div {
 
 .error {
   background-color: red !important;
+}
+
+.titulo {
+  display: flex;
+  justify-content: space-between;
+}
+
+.right-button {
 }

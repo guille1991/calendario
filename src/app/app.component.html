@@ -1,22 +1,48 @@
-<div class="calendario">
-  <div *ngFor="let item of calendar; let i= index">
+ <div class="info">
+  <h2 *ngIf="diasDesde && !diasHasta">El {{ diasDesde |
+    date: 'dd/MM/yyyy' }}, <span *ngIf="cantidadDias != 0">{{cantidadDias}}
+      {{texto}}.</span></h2>
+  <h2 *ngIf="diasDesde && diasHasta">Desde el {{ diasDesde |
+    date: 'dd/MM/yyyy' }}
+    hasta el {{diasHasta | date:
+    'dd/MM/yyyy'}}, <span *ngIf="cantidadDias != 0">{{cantidadDias}}
+      {{texto}}.</span></h2>
 
-    <div class="contenedor-mes">
-      <h1> {{item[0].numeroMes | mes}} - {{item[0].numeroAnio}}</h1>
-
-      <ol>
-        <li class="day-name" *ngFor="let dia of dias">{{dia |
-          slice:0:3}}</li>
-        <li
-          (click)="selectDay(number, i,j)"
-          *ngFor="let number of item; let first= first; ; let j= index"
-          class="dia-numero"
-          [ngClass]="{'bloqueado': !number.disponibilidad, 'disponible':
-          number.disponibilidad, 'seleccionado': number.seleccionado,'error':
-          (number.disponibilidad == false && number.seleccionado == true)}"
-          [style.gridColumnStart]="first? (number.indexNumeroSemana === 7 ?
-          0 : number.indexNumeroSemana + 1) : ''">{{number.numeroDia}}</li>
-      </ol>
-    </div>
+</div>
+<div
+  class="calendario">
+  <div class="contenedor-mes" *ngFor="let item of calendar |
+    paginador:primerMes; let i= index">
+    <!-- hay que hacer que el pipe del paginador devuelva el index para asignarselo a i -->
+    <div class="titulo"><button mat-button class="left-button bi
+        bi-chevron-left"
+        (click)="changePrimerMes(-1)"
+        [disabled]="primerMes == 0" [style.visibility]="i == 1? 'hidden':
+        'visible'"><span
+          class="material-symbols-outlined">
+          arrow_back_ios
+        </span></button>
+      <h3> {{item[0].numeroMes | mes}} {{item[0].numeroAnio}}</h3>
+      <button mat-button class="right-button" (click)="changePrimerMes(1)"
+        [disabled]="primerMes == 11" [style.visibility]="i == 0? 'hidden':
+        'visible'"><span
+          class="material-symbols-outlined">
+          arrow_forward_ios
+        </span></button></div>
+    <ol>
+      <li class="day-name" *ngFor="let dia of dias">{{dia |
+        slice:0:3}}</li>
+      <li
+        *ngFor="let number of item; let first= first; let j= index"
+        (click)="selectDay(number, i + primerMes,j)"
+        class="dia-numero"
+        [ngClass]="{'bloqueado': !number.disponibilidad, 'disponible':
+        number.disponibilidad, 'seleccionado': number.seleccionado,'error':
+        (number.disponibilidad == false && number.seleccionado == true)}"
+        [style.gridColumnStart]="first? (number.indexNumeroSemana === 7 ?
+        0 : number.indexNumeroSemana + 1) : ''">{{number.numeroDia}}</li>
+    </ol>
   </div>
+
+
 </div>

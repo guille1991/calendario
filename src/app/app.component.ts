@@ -1,4 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { first, Observable } from 'rxjs';
+import { DatesService } from './services/dates.service';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import * as dayjs from 'dayjs';
 import * as isoWeek from 'dayjs/plugin/isoWeek';
 import 'dayjs/locale/es';
@@ -24,11 +32,17 @@ export class AppComponent implements OnInit {
   title = 'calendario-interactivo';
   numbers: any[] = [];
   calendar: any[] = [];
-
+  primerMes: number = 0;
+  cantidadDias: number = 0;
+  texto: string = '';
   diasElegidos: { desde: any | null; hasta: any | null } = {
     desde: null,
     hasta: null,
   };
+  diasDesde: any | null;
+  diasHasta: any | null;
+
+  diasElegidos$!: Observable<{ desde: any | null; hasta: any | null }>;
 
   dias: string[] = [
     'Domingo',
@@ -41,15 +55,32 @@ export class AppComponent implements OnInit {
   ];
   day: any;
 
-  constructor() {}
+  constructor(private datesService: DatesService) {}
 
   ngOnInit(): void {
+    this.diasElegidos$ = this.datesService.diasElegidos$;
     this.getFullCalendar();
     this.disableAvailabilityofFirstMonth();
-  }
 
-  isBetween(date: Date) {
-    return true;
+    this.datesService.diasElegidos$.pipe().subscribe((e) => {
+      e.desde != null
+        ? (this.diasDesde = dayjs(e.desde))
+        : (this.diasDesde = null);
+      e.hasta != null
+        ? (this.diasHasta = dayjs(e.hasta))
+        : (this.diasHasta = null);
+
+      if (e.desde != null && e.hasta == null) {
+        this.cantidadDias = 1;
+        this.texto = 'día';
+      } else if (e.desde != null && e.hasta != null) {
+        this.cantidadDias =
+          dayjs(this.diasHasta).diff(dayjs(this.diasDesde), 'day') + 1;
+        this.texto = 'días';
+      } else {
+        this.cantidadDias = 0;
+      }
+    });
   }
 
   selectDay(dia: dia, indexMes: number, indexDia: number) {
@@ -59,6 +90,7 @@ export class AppComponent implements OnInit {
     if (this.diasElegidos.desde == null) {
       dia.seleccionado = true;
       this.diasElegidos.desde = dayjs(dia.date);
+      this.datesService.setDias(this.diasElegidos);
       return;
     }
 
@@ -68,6 +100,7 @@ export class AppComponent implements OnInit {
       dia.seleccionado = true;
       this.diasElegidos.desde = dayjs(dia.date);
       this.diasElegidos.hasta = null;
+      this.datesService.setDias(this.diasElegidos);
       return;
     }
 
@@ -77,6 +110,7 @@ export class AppComponent implements OnInit {
       dia.seleccionado = true;
       this.diasElegidos.desde = dayjs(dia.date);
       this.diasElegidos.hasta = null;
+      this.datesService.setDias(this.diasElegidos);
       return;
     }
 
@@ -85,10 +119,12 @@ export class AppComponent implements OnInit {
       this.cleanCalendar();
       if (this.diasElegidos.hasta == null) {
         this.diasElegidos.desde = null;
+        this.datesService.setDias(this.diasElegidos);
       } else {
         dia.seleccionado = true;
         this.diasElegidos.desde = dayjs(dia.date);
         this.diasElegidos.hasta = null;
+        this.datesService.setDias(this.diasElegidos);
       }
       return;
     }
@@ -98,34 +134,24 @@ export class AppComponent implements OnInit {
       //y es menor que la de fin o si la de fin no existe
       if (this.diasElegidos.hasta === null) {
         this.diasElegidos.hasta = dayjs(dia.date);
+        this.datesService.setDias(this.diasElegidos);
         this.paintCalendarGap(indexMes, indexDia);
+
         return;
       }
       //si la fecha es mayor que la de fin, la fecha es el nuevo fin
       if (dayjs(dia.date).isAfter(this.diasElegidos.hasta)) {
         this.diasElegidos.hasta = dayjs(dia.date);
+        this.datesService.setDias(this.diasElegidos);
         this.paintCalendarGap(indexMes, indexDia);
         //si la fecha es menor a la de fin, la fecha es el nuevo fin
       } else if (dayjs(dia.date).isBefore(this.diasElegidos.hasta)) {
         this.cleanCalendar();
         this.diasElegidos.hasta = dayjs(dia.date);
+        this.datesService.setDias(this.diasElegidos);
         this.paintCalendarGap(indexMes, indexDia);
       }
     }
-    // if (
-    //   dia.date > this.diasElegidos.desde &&
-    //   (this.diasElegidos.hasta == null || this.diasElegidos.hasta < dia.date)
-    // ) {
-    //   this.diasElegidos.hasta = dayjs(dia.date);
-    //   this.paintCalendarGap(indexMes, indexDia);
-    // } else if (
-    //   dia.date > this.diasElegidos.desde &&
-    //   dia.date < this.diasElegidos.hasta
-    // ) {
-    //   this.cleanCalendar();
-    //   this.diasElegidos.hasta = dayjs(dia.date);
-    //   this.paintCalendarGap(indexMes, indexDia);
-    // }
   }
 
   cleanCalendar() {
@@ -185,7 +211,12 @@ export class AppComponent implements OnInit {
       const disp =
         dayjs(date).isSame(dayjs(`8-10-2022`)) ||
         dayjs(date).isSame(dayjs(`8-12-2022`)) ||
-        dayjs(date).isSame(dayjs(`8-13-2022`))
+        dayjs(date).isSame(dayjs(`8-13-2022`)) ||
+        dayjs(date).isSame(dayjs(`8-23-2022`)) ||
+        dayjs(date).isSame(dayjs(`8-24-2022`)) ||
+        dayjs(date).isSame(dayjs(`9-1-2022`)) ||
+        dayjs(date).isSame(dayjs(`9-2-2022`)) ||
+        dayjs(date).isSame(dayjs(`9-3-2022`))
           ? 0
           : 1;
       return {
@@ -201,39 +232,11 @@ export class AppComponent implements OnInit {
     return arrayDays;
   }
 
-  getDaysFromDate(month: number, year: number, day: number) {
-    const diaActual = dayjs(`${month}-${day}-${year}`);
-    this.day = diaActual.format('MMMM YYYY');
-    const diaFinalDelMes = dayjs().endOf('month');
-    // console.log(diaActual, diaFinalDelMes);
-
-    const diasDelMes = dayjs(`${month}-${day}-${year}`).daysInMonth();
-
-    //para generar el calendario en x mes hay que saber cuantos dias tiene un mes
-    //const diaActual = dayjs().format('D');
-    //TODO: para saber que dias poner en negrita hay que ir desde el dia 1 de ese mes al dia anterior del actual
-
-    //array de todos los dias
-
-    const arrayDays = Object.keys([...Array(diasDelMes)]).map((a: any) => {
-      const dia = dayjs(`${month}-${parseInt(a) + 1}-${year}`);
-
-      let disp = 1;
-      if (dayjs().date() > parseInt(a) + 1) {
-        disp = -1;
-      }
-
-      // if (parseInt(a) + 1 === 30) {
-      //   disp = 0;
-      // }
-      return {
-        dia,
-        indexNumeroSemana: dia.isoWeekday(),
-        numeroDia: dia.date(),
-        disponibilidad: disp,
-      };
-    });
-
-    return arrayDays;
+  changePrimerMes(valor: number) {
+    if (this.primerMes + valor < 0 || this.primerMes + valor > 11) {
+      return;
+    }
+    this.primerMes = this.primerMes + valor;
+    console.log(this.primerMes);
   }
 }
