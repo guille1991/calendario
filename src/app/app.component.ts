@@ -76,16 +76,18 @@ export class AppComponent implements OnInit {
         ? (this.diasHasta[0] = dayjs(e.hasta[0]))
         : (this.diasHasta[0] = null);
 
+      this.cantidadDias = 0;
       if (e.desde[0] != null && e.hasta[0] != null) {
         this.cantidadDias =
           dayjs(this.diasHasta[0]).diff(dayjs(this.diasDesde[0]), 'day') + 1;
-        if (this.cantidadDias == 1) {
-          this.texto = 'noche';
-        } else {
-          this.texto = 'noches';
-        }
+      } else if (e.desde[0] != null) {
+        this.cantidadDias = 1;
+      }
+
+      if (this.cantidadDias == 1) {
+        this.texto = 'noche';
       } else {
-        this.cantidadDias = 0;
+        this.texto = 'noches';
       }
     });
   }
@@ -264,21 +266,21 @@ export class AppComponent implements OnInit {
         desde: this.diasDesde,
         hasta: this.diasHasta,
       });
-      console.log(this.diasDesde[1], this.diasHasta[1]);
       this.paintCalendarGap(this.diasDesde[1], this.diasDesde[1]);
+
+      let action = '';
+      let config: MatSnackBarConfig = {
+        duration: 333000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        panelClass: ['alerta'],
+      };
+      this._snackBar.open(
+        'Hay días no disponibles entre el rango de fechas',
+        action,
+        config
+      );
     }
-    let action = '';
-    let config: MatSnackBarConfig = {
-      duration: 202020,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-      panelClass: ['alerta'],
-    };
-    this._snackBar.open(
-      'Hay días no disponibles entre el rango de fechas',
-      action,
-      config
-    );
 
     // outer_loop: for (let i = indexMes; i >= 0; i--) {
     //   for (let j = indexDia; j >= 0; j--) {
