@@ -1,10 +1,21 @@
  <div style="display:flex; flex-direction:column;">
   <div class="info">
 
-    <h2 *ngIf="diasDesde && diasHasta">Desde el {{ diasDesde |
+    <h2 *ngIf="diasDesde[0] && !diasHasta[0]">La noche del {{ diasDesde[0]
+      |
       date: 'dd/MM/yyyy' }}
-      hasta el {{diasHasta | date:
-      'dd/MM/yyyy'}}, <span *ngIf="cantidadDias != 0">{{cantidadDias}}
+
+      <span *ngIf="cantidadDias != 0">{{cantidadDias}}
+        {{texto}}.</span></h2>
+
+    <h2 *ngIf="diasHasta[0]">Desde la noche del {{ diasDesde[0]
+      |
+      date: 'dd/MM/yyyy' }}
+
+      hasta la noche del {{diasHasta[0]
+      | date:
+      'dd/MM/yyyy'}}
+      , <span *ngIf="cantidadDias != 0">{{cantidadDias}}
         {{texto}}.</span></h2>
 
   </div>
@@ -23,7 +34,8 @@
             arrow_back_ios
           </span></button>
         <h3> {{item[0].numeroMes | mes}} {{item[0].numeroAnio}}</h3>
-        <button mat-button class="right-button" (click)="changePrimerMes(1)"
+        <button mat-button class="right-button"
+          (click)="changePrimerMes(1)"
           [disabled]="primerMes == 11" [style.visibility]="i == 0? 'hidden':
           'visible'"><span
             class="material-symbols-outlined">
@@ -34,7 +46,7 @@
           slice:0:3}}</li>
         <li
           *ngFor="let number of item; let first= first; let j= index"
-          (click)="selectDay(number, i + primerMes,j)"
+          (click)="selectDay(number, i,j)"
           class="dia-numero"
           [ngClass]="{'bloqueado': !number.disponibilidad, 'disponible':
           number.disponibilidad, 'seleccionado': number.seleccionado,'error':
@@ -46,12 +58,22 @@
   </div>
   <div class="info">
 
-    <h2 *ngIf="diasDesde && diasHasta">Desde el {{ diasDesde |
+    <h2 *ngIf="diasDesde[0] && !diasHasta[0]">La noche del {{ diasDesde[0]
+      |
       date: 'dd/MM/yyyy' }}
-      hasta el {{diasHasta | date:
-      'dd/MM/yyyy'}}, <span *ngIf="cantidadDias != 0">{{cantidadDias}}
+
+      <span *ngIf="cantidadDias != 0">{{cantidadDias}}
         {{texto}}.</span></h2>
 
+    <h2 *ngIf="diasHasta[0]">Desde la noche del {{ diasDesde[0]
+      |
+      date: 'dd/MM/yyyy' }}
+
+      hasta la noche del {{diasHasta[0]
+      | date:
+      'dd/MM/yyyy'}}
+      , <span *ngIf="cantidadDias != 0">{{cantidadDias}}
+        {{texto}}.</span></h2>
 
   </div>
 </div>
