@@ -141,7 +141,6 @@ export class AppComponent implements OnInit {
     //si la fecha es igual a la de inicio, que se limpien los dias elegidos
     if (dayjs(dia.date).isSame(dayjs(this.diasDesde[0]))) {
       this.cleanCalendar();
-      //console.log(!dayjs(dia.date).isSame(dayjs(this.diasHasta[0])));
       if (!dayjs(dia.date).isSame(dayjs(this.diasHasta[0]))) {
         dia.seleccionado = true;
         this.diasDesde = [dayjs(dia.date), indexMesDia];
@@ -176,11 +175,6 @@ export class AppComponent implements OnInit {
       }
       //si la fecha es mayor que la de fin, la fecha es el nuevo fin
       if (dayjs(dia.date).isAfter(this.diasHasta[0])) {
-        console.log(
-          this.diasHasta,
-          this.checkCalendarGapAvailability(this.diasHasta[1], indexMesDia)
-        );
-        console.log(this.diasDesde[1], this.diasHasta[1], indexMesDia);
         if (this.checkCalendarGapAvailability(this.diasHasta[1], indexMesDia)) {
           this.diasHasta = [dayjs(dia.date), indexMesDia];
           this.datesService.setDias({
