@@ -56,28 +56,7 @@
       </ol>
     </div>
   </div>
-  <div class="info">
-
-    <h2 *ngIf="diasDesde[0] && !diasHasta[0]">La noche del {{ diasDesde[0]
-      |
-      date: 'dd/MM/yyyy' }}
-
-      <span *ngIf="cantidadDias != 0">{{cantidadDias}}
-        {{texto}}.</span></h2>
-
-    <h2 *ngIf="diasHasta[0]">Desde la noche del {{ diasDesde[0]
-      |
-      date: 'dd/MM/yyyy' }}
-
-      hasta la noche del {{diasHasta[0]
-      | date:
-      'dd/MM/yyyy'}}
-      , <span *ngIf="cantidadDias != 0">{{cantidadDias}}
-        {{texto}}.</span></h2>
-
-  </div>
 </div>
-
 <div *ngIf="cantidadDias> 0" class="mat-mini-fab snackDias"><span
     style="margin-top: 3px;">{{cantidadDias}}</span><span
     class="material-symbols-outlined">
