@@ -183,6 +183,7 @@ export class AppComponent implements OnInit {
           desde: this.diasDesde,
           hasta: this.diasHasta,
         });
+        this.paintCalendarGap(this.diasDesde[1], this.diasHasta[1]);
       }
     }
   }
