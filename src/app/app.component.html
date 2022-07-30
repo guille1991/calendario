@@ -8,11 +8,11 @@
       <span *ngIf="cantidadDias != 0">{{cantidadDias}}
         {{texto}}.</span></h2>
 
-    <h2 *ngIf="diasHasta[0]">Desde la noche del {{ diasDesde[0]
+    <h2 *ngIf="diasHasta[0]">Desde el mediodia del {{ diasDesde[0]
       |
       date: 'dd/MM/yyyy' }}
 
-      hasta la noche del {{diasHasta[0]
+      hasta la mañana del {{diaSiguiente
       | date:
       'dd/MM/yyyy'}}
       , <span *ngIf="cantidadDias != 0">{{cantidadDias}}

@@ -62,13 +62,17 @@ export class AppComponent implements OnInit {
     this.disableAvailabilityofFirstMonth();
 
     this.datesService.diasElegidos$.pipe().subscribe((e) => {
-      //console.log(e, e.desde, e.hasta);
-      e.desde[0] != null
-        ? (this.diasDesde[0] = dayjs(e.desde[0]))
-        : (this.diasDesde[0] = null);
-      e.hasta[0] != null
-        ? (this.diasHasta[0] = dayjs(e.hasta[0]))
-        : (this.diasHasta[0] = null);
+      if (e.desde[0] != null) {
+        this.diasDesde[0] = dayjs(e.desde[0]);
+        if (e.hasta[0] == null) {
+          this.diasHasta[0] = dayjs(e.desde[0]);
+        } else {
+          this.diasHasta[0] = dayjs(e.hasta[0]);
+        }
+      } else {
+        this.diasDesde[0] = null;
+        this.diasHasta[0] = null;
+      }
 
       this.cantidadDias = 0;
       if (e.desde[0] != null && e.hasta[0] != null) {
@@ -108,7 +112,10 @@ export class AppComponent implements OnInit {
     }
 
     //si la fecha es la misma que la final, que la fecha sea la de inicio
-    if (dayjs(dia.date).isSame(dayjs(this.diasHasta[0]))) {
+    if (
+      dayjs(dia.date).isSame(dayjs(this.diasHasta[0])) &&
+      !dayjs(this.diasDesde[0]).isSame(dayjs(this.diasHasta[0]))
+    ) {
       this.cleanCalendar();
       dia.seleccionado = true;
       this.diasDesde = [dayjs(dia.date), indexMesDia];
@@ -136,13 +143,8 @@ export class AppComponent implements OnInit {
     //si la fecha es igual a la de inicio, que se limpien los dias elegidos
     if (dayjs(dia.date).isSame(dayjs(this.diasDesde[0]))) {
       this.cleanCalendar();
-      if (this.diasHasta[0] == null) {
-        this.diasDesde = [null, []];
-        this.datesService.setDias({
-          desde: this.diasDesde,
-          hasta: this.diasHasta,
-        });
-      } else {
+      //console.log(!dayjs(dia.date).isSame(dayjs(this.diasHasta[0])));
+      if (!dayjs(dia.date).isSame(dayjs(this.diasHasta[0]))) {
         dia.seleccionado = true;
         this.diasDesde = [dayjs(dia.date), indexMesDia];
         this.diasHasta = [null, []];
@@ -150,7 +152,32 @@ export class AppComponent implements OnInit {
           desde: this.diasDesde,
           hasta: this.diasHasta,
         });
+      } else {
+        this.diasDesde = [null, []];
+        this.diasHasta = [null, []];
+        this.datesService.setDias({
+          desde: this.diasDesde,
+          hasta: this.diasHasta,
+        });
       }
+
+      //console.log(dayjs(this.diasHasta[0]), dayjs(this.diasDesde[0]));
+      // if (dayjs(this.diasHasta[0]).isSame(dayjs(this.diasDesde[0]))) {
+      //   console.log('a');
+      //   this.diasDesde = [null, []];
+      //   this.datesService.setDias({
+      //     desde: this.diasDesde,
+      //     hasta: this.diasHasta,
+      //   });
+      // } else {
+      //   dia.seleccionado = true;
+      //   this.diasDesde = [dayjs(dia.date), indexMesDia];
+      //   this.diasHasta = [null, []];
+      //   this.datesService.setDias({
+      //     desde: this.diasDesde,
+      //     hasta: this.diasHasta,
+      //   });
+      // }
       return;
     }
 
@@ -211,7 +238,7 @@ export class AppComponent implements OnInit {
       // }
 
       if (i == indexInicio[0] && i != indexFin[0]) {
-        console.log('el mes es igual al de inicio ');
+        //console.log('el mes es igual al de inicio ');
         for (let j = indexInicio[1]; j < this.calendar[i].length; j++) {
           if (this.calendar[i][j].disponibilidad == true) {
             this.calendar[i][j].seleccionado = true;
@@ -221,7 +248,7 @@ export class AppComponent implements OnInit {
           }
         }
       } else if (i == indexInicio[0] && i == indexFin[0]) {
-        console.log('el mes es igual al de inicio y igual al de fin');
+        //console.log('el mes es igual al de inicio y igual al de fin');
         for (let j = indexInicio[1]; j <= indexFin[1]; j++) {
           //       //console.log(this.calendar[i][j]);
           if (this.calendar[i][j].disponibilidad == true) {
@@ -232,7 +259,7 @@ export class AppComponent implements OnInit {
           }
         }
       } else if (i == indexFin[0]) {
-        console.log('el mes es igual al de fin');
+        //console.log('el mes es igual al de fin');
         for (let j = 0; j <= indexFin[1]; j++) {
           //       //console.log(this.calendar[i][j]);
           if (this.calendar[i][j].disponibilidad == true) {
@@ -245,7 +272,7 @@ export class AppComponent implements OnInit {
       }
 
       if (i != indexInicio[0] && i != indexFin[0]) {
-        console.log('el mes esta en el medio');
+        //console.log('el mes esta en el medio');
         for (let j = 0; j < this.calendar[i].length; j++) {
           if (this.calendar[i][j].disponibilidad == true) {
             this.calendar[i][j].seleccionado = true;
