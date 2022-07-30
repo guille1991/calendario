@@ -61,7 +61,7 @@ div {
 }
 
 .seleccionado {
-  background-color: lightgreen;
+  background-color: rgb(105, 238, 105);
 }
 
 .error {
@@ -88,6 +88,23 @@ div {
   width: 50px;
   height: 50px;
   right: 5px;
+  bottom: 5px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 5px;
+  box-sizing: border-box;
+  cursor: default;
+}
+
+.snackFechas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: lightcyan;
+  padding: 0;
+  position: fixed;
+  width: auto;
+  border-radius: 3px;
+  left: 5px;
+  height: 50px;
   bottom: 5px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 5px;
   box-sizing: border-box;

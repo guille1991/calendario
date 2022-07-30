@@ -83,3 +83,23 @@
     class="material-symbols-outlined">
     bedtime
   </span></div>
+
+
+<div class="mat-mini-fab snackFechas" *ngIf="diasDesde[0]">
+  <span style="margin: 3px;"
+    class="material-symbols-outlined">
+    input
+  </span> <span>{{ diasDesde[0]
+    |
+    date: 'dd/MM/yyyy' }}</span><span
+    class="material-symbols-outlined">
+    more_vert
+  </span>
+  <div><span>{{diaSiguiente
+      | date:
+      'dd/MM/yyyy' }}</span><span style="margin:
+      3px;"
+      class="material-symbols-outlined">
+      output
+    </span></div>
+</div>

@@ -1,17 +1,10 @@
-import { first, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { DatesService } from './services/dates.service';
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as dayjs from 'dayjs';
 import * as isoWeek from 'dayjs/plugin/isoWeek';
 import 'dayjs/locale/es';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { Action } from 'rxjs/internal/scheduler/Action';
 dayjs.extend(isoWeek);
 dayjs.locale('es');
 
@@ -36,6 +29,7 @@ export class AppComponent implements OnInit {
   calendar: any[] = [];
   primerMes: number = 0;
   cantidadDias: number = 0;
+  diaSiguiente: any | null;
   texto: string = '';
   // diasElegidos: { desde: any | null; hasta: any | null } = {
   //   desde: null,
@@ -80,8 +74,11 @@ export class AppComponent implements OnInit {
       if (e.desde[0] != null && e.hasta[0] != null) {
         this.cantidadDias =
           dayjs(this.diasHasta[0]).diff(dayjs(this.diasDesde[0]), 'day') + 1;
+
+        this.diaSiguiente = dayjs(this.diasHasta[0]).add(1, 'day');
       } else if (e.desde[0] != null) {
         this.cantidadDias = 1;
+        this.diaSiguiente = dayjs(this.diasDesde[0]).add(1, 'day');
       }
 
       if (this.cantidadDias == 1) {
@@ -270,7 +267,7 @@ export class AppComponent implements OnInit {
 
       let action = '';
       let config: MatSnackBarConfig = {
-        duration: 333000,
+        duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
         panelClass: ['alerta'],
@@ -329,10 +326,7 @@ export class AppComponent implements OnInit {
         dayjs(date).isSame(dayjs(`8-12-2022`)) ||
         dayjs(date).isSame(dayjs(`8-13-2022`)) ||
         dayjs(date).isSame(dayjs(`8-23-2022`)) ||
-        dayjs(date).isSame(dayjs(`8-24-2022`)) ||
-        dayjs(date).isSame(dayjs(`9-1-2022`)) ||
-        dayjs(date).isSame(dayjs(`9-2-2022`)) ||
-        dayjs(date).isSame(dayjs(`9-3-2022`))
+        dayjs(date).isSame(dayjs(`8-24-2022`))
           ? 0
           : 1;
       return {
