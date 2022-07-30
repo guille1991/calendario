@@ -65,13 +65,13 @@ export class AppComponent implements OnInit {
       if (e.desde[0] != null) {
         this.diasDesde[0] = dayjs(e.desde[0]);
         if (e.hasta[0] == null) {
-          this.diasHasta[0] = dayjs(e.desde[0]);
+          this.diasHasta = [dayjs(e.desde[0]), e.desde[1]];
         } else {
           this.diasHasta[0] = dayjs(e.hasta[0]);
         }
       } else {
-        this.diasDesde[0] = null;
-        this.diasHasta[0] = null;
+        this.diasDesde = [null, []];
+        this.diasHasta = [null, []];
       }
 
       this.cantidadDias = 0;
@@ -96,11 +96,9 @@ export class AppComponent implements OnInit {
   selectDay(dia: dia, indexMes: number, indexDia: number) {
     indexMes = indexMes + this.primerMes;
     const indexMesDia = [indexMes, indexDia];
-    //console.log(dia, indexMesDia);
     if (dia.disponibilidad == false) {
       return;
     }
-    //console.log(this.diasDesde);
     if (this.diasDesde[0] == null) {
       dia.seleccionado = true;
       this.diasDesde = [dayjs(dia.date), indexMesDia];
@@ -160,24 +158,6 @@ export class AppComponent implements OnInit {
           hasta: this.diasHasta,
         });
       }
-
-      //console.log(dayjs(this.diasHasta[0]), dayjs(this.diasDesde[0]));
-      // if (dayjs(this.diasHasta[0]).isSame(dayjs(this.diasDesde[0]))) {
-      //   console.log('a');
-      //   this.diasDesde = [null, []];
-      //   this.datesService.setDias({
-      //     desde: this.diasDesde,
-      //     hasta: this.diasHasta,
-      //   });
-      // } else {
-      //   dia.seleccionado = true;
-      //   this.diasDesde = [dayjs(dia.date), indexMesDia];
-      //   this.diasHasta = [null, []];
-      //   this.datesService.setDias({
-      //     desde: this.diasDesde,
-      //     hasta: this.diasHasta,
-      //   });
-      // }
       return;
     }
 
@@ -196,12 +176,24 @@ export class AppComponent implements OnInit {
       }
       //si la fecha es mayor que la de fin, la fecha es el nuevo fin
       if (dayjs(dia.date).isAfter(this.diasHasta[0])) {
-        this.diasHasta = [dayjs(dia.date), indexMesDia];
-        this.datesService.setDias({
-          desde: this.diasDesde,
-          hasta: this.diasHasta,
-        });
-        this.paintCalendarGap(this.diasDesde[1], this.diasHasta[1]);
+        console.log(
+          this.diasHasta,
+          this.checkCalendarGapAvailability(this.diasHasta[1], indexMesDia)
+        );
+        console.log(this.diasDesde[1], this.diasHasta[1], indexMesDia);
+        if (this.checkCalendarGapAvailability(this.diasHasta[1], indexMesDia)) {
+          this.diasHasta = [dayjs(dia.date), indexMesDia];
+          this.datesService.setDias({
+            desde: this.diasDesde,
+            hasta: this.diasHasta,
+          });
+          this.paintCalendarGap(this.diasDesde[1], indexMesDia);
+        } else {
+          this.showErrorSnackBar(
+            'Hay días no disponibles entre ese rango de fechas'
+          );
+        }
+
         //si la fecha es menor a la de fin, la fecha es el nuevo fin
       } else if (dayjs(dia.date).isBefore(this.diasHasta[0])) {
         this.cleanCalendar();
@@ -224,25 +216,13 @@ export class AppComponent implements OnInit {
       });
     });
   }
-
-  paintCalendarGap(indexInicio: number[], indexFin: number[]) {
+  checkCalendarGapAvailability(indexInicio: number[], indexFin: number[]) {
     let redFlag = false;
-    //console.log('indexInicio', indexInicio, 'indexFin', indexFin);
     outer_loop: for (let i = indexInicio[0]; i <= indexFin[0]; i++) {
-      // console.log(indexInicio[1], indexFin[1]);
-      // if (indexInicio[1] < indexFin[1]) {
-      //   console.log(this.calendar[i][indexInicio[1]]);
-      //   this.calendar[i][indexInicio[1]].seleccionado = true;
-      //   indexInicio[1]++;
-
-      // }
-
       if (i == indexInicio[0] && i != indexFin[0]) {
         //console.log('el mes es igual al de inicio ');
         for (let j = indexInicio[1]; j < this.calendar[i].length; j++) {
-          if (this.calendar[i][j].disponibilidad == true) {
-            this.calendar[i][j].seleccionado = true;
-          } else {
+          if (this.calendar[i][j].disponibilidad == false) {
             redFlag = true;
             break outer_loop;
           }
@@ -250,10 +230,7 @@ export class AppComponent implements OnInit {
       } else if (i == indexInicio[0] && i == indexFin[0]) {
         //console.log('el mes es igual al de inicio y igual al de fin');
         for (let j = indexInicio[1]; j <= indexFin[1]; j++) {
-          //       //console.log(this.calendar[i][j]);
-          if (this.calendar[i][j].disponibilidad == true) {
-            this.calendar[i][j].seleccionado = true;
-          } else {
+          if (this.calendar[i][j].disponibilidad == false) {
             redFlag = true;
             break outer_loop;
           }
@@ -261,11 +238,55 @@ export class AppComponent implements OnInit {
       } else if (i == indexFin[0]) {
         //console.log('el mes es igual al de fin');
         for (let j = 0; j <= indexFin[1]; j++) {
-          //       //console.log(this.calendar[i][j]);
+          if (this.calendar[i][j].disponibilidad == false) {
+            redFlag = true;
+            break outer_loop;
+          }
+        }
+      }
+
+      if (i != indexInicio[0] && i != indexFin[0]) {
+        //console.log('el mes esta en el medio');
+        for (let j = 0; j < this.calendar[i].length; j++) {
+          if (this.calendar[i][j].disponibilidad == false) {
+            redFlag = true;
+            break outer_loop;
+          }
+        }
+      }
+    }
+
+    if (redFlag) {
+      return false;
+    }
+    return true;
+  }
+  paintCalendarGap(indexInicio: number[], indexFin: number[]) {
+    outer_loop: for (let i = indexInicio[0]; i <= indexFin[0]; i++) {
+      if (i == indexInicio[0] && i != indexFin[0]) {
+        //console.log('el mes es igual al de inicio ');
+        for (let j = indexInicio[1]; j < this.calendar[i].length; j++) {
           if (this.calendar[i][j].disponibilidad == true) {
             this.calendar[i][j].seleccionado = true;
           } else {
-            redFlag = true;
+            break outer_loop;
+          }
+        }
+      } else if (i == indexInicio[0] && i == indexFin[0]) {
+        //console.log('el mes es igual al de inicio y igual al de fin');
+        for (let j = indexInicio[1]; j <= indexFin[1]; j++) {
+          if (this.calendar[i][j].disponibilidad == true) {
+            this.calendar[i][j].seleccionado = true;
+          } else {
+            break outer_loop;
+          }
+        }
+      } else if (i == indexFin[0]) {
+        //console.log('el mes es igual al de fin');
+        for (let j = 0; j <= indexFin[1]; j++) {
+          if (this.calendar[i][j].disponibilidad == true) {
+            this.calendar[i][j].seleccionado = true;
+          } else {
             break outer_loop;
           }
         }
@@ -277,47 +298,22 @@ export class AppComponent implements OnInit {
           if (this.calendar[i][j].disponibilidad == true) {
             this.calendar[i][j].seleccionado = true;
           } else {
-            redFlag = true;
             break outer_loop;
           }
         }
       }
     }
+  }
 
-    if (redFlag) {
-      this.cleanCalendar();
-      this.diasHasta = [null, []];
-      this.datesService.setDias({
-        desde: this.diasDesde,
-        hasta: this.diasHasta,
-      });
-      this.paintCalendarGap(this.diasDesde[1], this.diasDesde[1]);
-
-      let action = '';
-      let config: MatSnackBarConfig = {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-        panelClass: ['alerta'],
-      };
-      this._snackBar.open(
-        'Hay días no disponibles entre el rango de fechas',
-        action,
-        config
-      );
-    }
-
-    // outer_loop: for (let i = indexMes; i >= 0; i--) {
-    //   for (let j = indexDia; j >= 0; j--) {
-    //     if (this.calendar[i][j].disponible === false) {
-    //     }
-    //     this.calendar[i][j].seleccionado = true;
-    //     if (dayjs(this.calendar[i][j].date).isSame(dayjs(this.diasDesde[0]))) {
-    //       break outer_loop;
-    //     }
-    //   }
-    //   indexDia = this.calendar[i - 1].length - 1;
-    // }
+  showErrorSnackBar(text: string) {
+    let action = '';
+    let config: MatSnackBarConfig = {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      panelClass: ['alerta'],
+    };
+    this._snackBar.open(text, action, config);
   }
 
   getFullCalendar() {
