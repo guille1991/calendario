@@ -21,16 +21,9 @@ export class ReservaComponent implements OnInit {
 
   ngOnInit(): void {
     this.datesService.diasElegidos$.subscribe((e) => {
-      if (e.desde[0] && e.hasta[0]) {
-        this.cantidadDias =
-          dayjs(e.hasta[0]).diff(dayjs(e.desde[0]), 'day') + 1;
-        this.fechas = { desde: e.desde[0], hasta: e.hasta[0] };
-        this.fechaSiguiente = dayjs(e.hasta[0]).add(1, 'day');
-      } else {
-        this.cantidadDias = 0;
-        this.fechas = { desde: null, hasta: null };
-        this.fechaSiguiente = null;
-      }
+      this.fechas = { desde: e.desde[0], hasta: e.hasta[0] };
+      this.cantidadDias = e.cantidadDias;
+      this.fechaSiguiente = e.diaSiguiente;
     });
   }
 }

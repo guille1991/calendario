@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { first, Observable } from 'rxjs';
 import { DatesService } from './services/dates.service';
 import { Component, OnInit } from '@angular/core';
 import * as dayjs from 'dayjs';
@@ -62,35 +62,20 @@ export class AppComponent implements OnInit {
     this.disableAvailabilityofFirstMonth();
 
     this.datesService.diasElegidos$.pipe().subscribe((e) => {
-      if (e.desde[0] != null) {
-        this.diasDesde[0] = dayjs(e.desde[0]);
-        if (e.hasta[0] == null) {
-          this.diasHasta = [dayjs(e.desde[0]), e.desde[1]];
-        } else {
-          this.diasHasta[0] = dayjs(e.hasta[0]);
-        }
-      } else {
-        this.diasDesde = [null, []];
-        this.diasHasta = [null, []];
-      }
-
-      this.cantidadDias = 0;
-      if (e.desde[0] != null && e.hasta[0] != null) {
-        this.cantidadDias =
-          dayjs(this.diasHasta[0]).diff(dayjs(this.diasDesde[0]), 'day') + 1;
-
-        this.diaSiguiente = dayjs(this.diasHasta[0]).add(1, 'day');
-      } else if (e.desde[0] != null) {
-        this.cantidadDias = 1;
-        this.diaSiguiente = dayjs(this.diasDesde[0]).add(1, 'day');
-      }
-
-      if (this.cantidadDias == 1) {
-        this.texto = 'noche';
-      } else {
-        this.texto = 'noches';
-      }
+      this.diasDesde = [e.desde[0], e.desde[1]];
+      this.diasHasta = [e.hasta[0], e.hasta[1]];
+      this.cantidadDias = e.cantidadDias;
+      this.diaSiguiente = e.diaSiguiente;
+      this.setNightText();
     });
+  }
+
+  setNightText() {
+    if (this.cantidadDias == 1) {
+      this.texto = 'noche';
+    } else {
+      this.texto = 'noches';
+    }
   }
 
   selectDay(dia: dia, indexMes: number, indexDia: number) {
@@ -319,9 +304,14 @@ export class AppComponent implements OnInit {
         month = 1;
         year++;
       }
+
       this.calendar.push(this.getMonthInfo(month, year));
+
       month++;
     }
+    // var start = window.performance.now();
+    // var end = window.performance.now();
+    // console.log(`Execution time: ${end - start} ms`);
   }
 
   disableAvailabilityofFirstMonth() {
@@ -335,21 +325,23 @@ export class AppComponent implements OnInit {
   getMonthInfo(month: number, year: number) {
     //console.log(dayjs(`1/${month}/${year}`));
     const diaFinalDelMes = dayjs(`${month}/01/${year}`).daysInMonth();
-    //console.log(diaFinalDelMes);
+    let diasOcupados: string[] = [];
+    this.datesService.diasOcupados$.pipe(first()).subscribe((e) => {
+      diasOcupados = e;
+    });
+
     const arrayDays = Object.keys([...Array(diaFinalDelMes)]).map((a: any) => {
-      //console.log(a);
       const dia = dayjs(`${month}/${parseInt(a) + 1}/${year}`).isoWeekday();
       const date = dayjs(`${month}/${parseInt(a) + 1}/${year}`);
 
-      const disp =
-        dayjs(date).isSame(dayjs(`8/9/2022`)) ||
-        dayjs(date).isSame(dayjs(`8/10/2022`)) ||
-        dayjs(date).isSame(dayjs(`8/12/2022`)) ||
-        dayjs(date).isSame(dayjs(`8/13/2022`)) ||
-        dayjs(date).isSame(dayjs(`8/23/2022`)) ||
-        dayjs(date).isSame(dayjs(`8/24/2022`))
-          ? 0
-          : 1;
+      let disp = 1;
+      for (let i = diasOcupados.length - 1; i >= 0; i--) {
+        if (dayjs(date).isSame(dayjs(diasOcupados[i]))) {
+          disp = 0;
+          diasOcupados.splice(i, 1);
+        }
+      }
+
       return {
         date,
         disponibilidad: disp,
@@ -360,10 +352,11 @@ export class AppComponent implements OnInit {
         seleccionado: false,
       };
     });
+
     return arrayDays;
   }
 
-  changePrimerMes(valor: number) {
+  cambiarPrimerMes(valor: number) {
     if (this.primerMes + valor < 0 || this.primerMes + valor > 11) {
       return;
     }
@@ -372,11 +365,6 @@ export class AppComponent implements OnInit {
 
   borrarFechas() {
     this.cleanCalendar();
-    this.diasDesde = [null, []];
-    this.diasHasta = [null, []];
-    this.datesService.setDias({
-      desde: this.diasDesde,
-      hasta: this.diasHasta,
-    });
+    this.datesService.removeDias();
   }
 }

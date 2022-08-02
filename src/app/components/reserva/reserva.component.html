@@ -1,16 +1,15 @@
-<div class="componente" style="display:flex; flex-direction: column;">
-  <div style="align-self:start; margin-bottom:2rem;"><span
-      style="font-weight: 800;font-size: 1.5rem">${{precio}}</span><span>/noche</span></div>
-  <div style="margin-top:0.5rem;margin-bottom:0.5rem">
-    <div><span style="font-weight: 500">Entrada: </span>
-      <span *ngIf="fechas.desde ;else
+<div class="componente">
+  <div class="precio__noche"><span>${{precio}}</span><span>/noche</span></div>
+  <div class="fechas">
+    <div class="fecha__desde"><span>Entrada: </span>
+      <span *ngIf="fechas.desde != null ;else
         other_content">El mediodia del {{fechas.desde |
         date: 'dd/MM/yyyy'}}
       </span>
     </div>
-    <div style="margin-top:0.5rem;"><span style="font-weight: 500">Salida:
+    <div class="fecha__hasta"><span>Salida:
       </span>
-      <span *ngIf="fechaSiguiente ;else
+      <span *ngIf="fechaSiguiente != null;else
         other_content">La mañana del {{fechaSiguiente |
         date:
         'dd/MM/yyyy'}}
@@ -18,14 +17,12 @@
     </div>
   </div>
 
-  <button [disabled]="cantidadDias == 0" mat-raised-button color="primary"
-    style="margin-top:2rem;
-    margin-bottom: 1rem;">Reservar</button>
+  <button class="reservar__btn" [disabled]="cantidadDias == 0" mat-raised-button
+    color="primary">Reservar</button>
   <mat-divider></mat-divider>
-  <div class="valor" style="display:flex;justify-content: space-between;
-    font-weight:800;font-size: 1.2rem; margin-top:1rem;"><div>Total
+  <div class="valor"><div>Total
       por {{cantidadDias}} noches</div>
     <div>${{precio*cantidadDias}}</div></div>
 </div>
 
-<ng-template #other_content>-</ng-template>
+<ng-template #other_content><div>-</div></ng-template>

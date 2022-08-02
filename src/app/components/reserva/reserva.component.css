@@ -7,10 +7,54 @@
   border-radius: 1rem;
   background-color: aliceblue;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
 
-  /* margin: 0;
-  padding: 0; */
-  /* background-color: aliceblue; */
-  /* border-radius: 1rem;
-  height: auto; */
+.precio__noche {
+  align-self: start;
+  margin-bottom: 2rem;
+}
+
+.precio__noche > span:nth-child(1) {
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+.fechas {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.fecha__desde {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+.fecha__desde > span:nth-child(1) {
+  font-weight: 500;
+}
+
+.fecha__hasta {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+.fecha__hasta > span:nth-child(1) {
+  font-weight: 500;
+}
+
+.reservar__btn {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.valor {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 800;
+  font-size: 1.2rem;
+  margin-top: 1rem;
 }

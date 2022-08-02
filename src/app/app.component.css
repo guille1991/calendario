@@ -28,7 +28,16 @@ li {
 .component {
   /* border: 1px solid black; */
   /* margin-top: 5rem; */
-  padding: 0.5rem;
+  /* padding: 0.5rem; */
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem;
+  /* display: flex; */
+  flex-direction: column;
+  background-color: aliceblue;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  margin-bottom: 3rem;
 }
 
 .info {
@@ -106,10 +115,18 @@ div {
 .check-in-out {
   display: flex;
   flex-direction: column;
-
+  margin-left: 1rem;
   font-size: 14px;
   /* line-height: 18px; */
   text-align: left;
+}
+
+.check-in-out > span:nth-child(1) {
+  font-weight: 800;
+  width: 80px;
+}
+.check-in-out > span:nth-child(2) {
+  font-size: 0.875rem;
 }
 
 .borrar {
@@ -132,13 +149,16 @@ div {
   box-sizing: border-box;
   cursor: default;
 }
+
+.snackDias > span:nth-child(1) {
+  margin-top: 3px;
+}
 .cantidad-precio {
   font-size: 1.375rem;
   font-weight: 600;
   line-height: 26px;
 }
-.cantidad-noches {
-}
+
 .snackFechas {
   display: flex;
   justify-content: center;
@@ -163,4 +183,10 @@ h4 {
 
 .dia-numero {
   user-select: none;
+}
+
+.principal {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
