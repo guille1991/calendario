@@ -118,7 +118,7 @@ export class AppComponent implements OnInit {
       this.cleanCalendar();
       dia.seleccionado = true;
       this.diasDesde = [dayjs(dia.date), indexMesDia];
-      this.diasHasta = [null, []];
+      this.diasHasta = [dayjs(dia.date), indexMesDia];
       this.datesService.setDias({
         desde: this.diasDesde,
         hasta: this.diasHasta,
@@ -131,7 +131,7 @@ export class AppComponent implements OnInit {
       this.cleanCalendar();
       dia.seleccionado = true;
       this.diasDesde = [dayjs(dia.date), indexMesDia];
-      this.diasHasta = [null, []];
+      this.diasHasta = [dayjs(dia.date), indexMesDia];
       this.datesService.setDias({
         desde: this.diasDesde,
         hasta: this.diasHasta,
