@@ -333,19 +333,21 @@ export class AppComponent implements OnInit {
   }
 
   getMonthInfo(month: number, year: number) {
-    const diaFinalDelMes = dayjs(`${month}-1-${year}`).daysInMonth();
-
+    //console.log(dayjs(`1/${month}/${year}`));
+    const diaFinalDelMes = dayjs(`${month}/01/${year}`).daysInMonth();
+    //console.log(diaFinalDelMes);
     const arrayDays = Object.keys([...Array(diaFinalDelMes)]).map((a: any) => {
-      const dia = dayjs(`${month}-${parseInt(a) + 1}-${year}`).isoWeekday();
-      const date = dayjs(`${month}-${parseInt(a) + 1}-${year}`);
+      //console.log(a);
+      const dia = dayjs(`${month}/${parseInt(a) + 1}/${year}`).isoWeekday();
+      const date = dayjs(`${month}/${parseInt(a) + 1}/${year}`);
 
       const disp =
-        dayjs(date).isSame(dayjs(`8-9-2022`)) ||
-        dayjs(date).isSame(dayjs(`8-10-2022`)) ||
-        dayjs(date).isSame(dayjs(`8-12-2022`)) ||
-        dayjs(date).isSame(dayjs(`8-13-2022`)) ||
-        dayjs(date).isSame(dayjs(`8-23-2022`)) ||
-        dayjs(date).isSame(dayjs(`8-24-2022`))
+        dayjs(date).isSame(dayjs(`8/9/2022`)) ||
+        dayjs(date).isSame(dayjs(`8/10/2022`)) ||
+        dayjs(date).isSame(dayjs(`8/12/2022`)) ||
+        dayjs(date).isSame(dayjs(`8/13/2022`)) ||
+        dayjs(date).isSame(dayjs(`8/23/2022`)) ||
+        dayjs(date).isSame(dayjs(`8/24/2022`))
           ? 0
           : 1;
       return {
