@@ -302,7 +302,7 @@ export class AppComponent implements OnInit {
   showErrorSnackBar(text: string) {
     let action = '';
     let config: MatSnackBarConfig = {
-      duration: 3000,
+      duration: 2000,
       horizontalPosition: 'right',
       verticalPosition: 'top',
       panelClass: ['alerta'],
