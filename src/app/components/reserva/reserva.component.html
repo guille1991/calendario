@@ -1,20 +1,18 @@
 <div class="componente">
   <div class="precio__noche"><span>${{precio}}</span><span>/noche</span></div>
   <div class="fechas">
-    <div class="fecha__desde"><span>Entrada: </span>
-      <span *ngIf="fechas.desde != null ;else
-        other_content">El mediodia del {{fechas.desde |
-        date: 'dd/MM/yyyy'}}
-      </span>
-    </div>
-    <div class="fecha__hasta"><span>Salida:
-      </span>
-      <span *ngIf="fechaSiguiente != null;else
-        other_content">La mañana del {{fechaSiguiente |
-        date:
-        'dd/MM/yyyy'}}
-      </span>
-    </div>
+    <span>Entrada: </span>
+    <span *ngIf="fechas.desde != null ;else
+      other_content">El mediodia del {{fechas.desde |
+      date: 'dd/MM/yyyy'}}
+    </span>
+    <span>Salida:
+    </span>
+    <span *ngIf="fechaSiguiente != null;else
+      other_content">La mañana del {{fechaSiguiente |
+      date:
+      'dd/MM/yyyy'}}
+    </span>
   </div>
 
   <button class="reservar__btn" [disabled]="cantidadDias == 0" mat-raised-button

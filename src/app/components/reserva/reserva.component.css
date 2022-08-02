@@ -1,14 +1,16 @@
-:host {
-}
-
 .componente {
   width: 300px;
   margin: 0.5rem;
   border-radius: 1rem;
-  background-color: aliceblue;
+  /* background-color: aliceblue; */
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
+}
+
+mat-divider {
+  background-color: #3f51b5;
 }
 
 .precio__noche {
@@ -25,24 +27,14 @@
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   text-align: left;
-}
-
-.fecha__desde {
   display: grid;
   grid-template-columns: 1fr 3fr;
+  grid-template-rows: 1fr 1fr;
+  row-gap: 1rem;
 }
 
-.fecha__desde > span:nth-child(1) {
-  font-weight: 500;
-}
-
-.fecha__hasta {
-  margin-top: 0.5rem;
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-}
-
-.fecha__hasta > span:nth-child(1) {
+.fechas > span:nth-child(1),
+.fechas > span:nth-child(3) {
   font-weight: 500;
 }
 

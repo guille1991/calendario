@@ -1,0 +1,80 @@
+<div class="component">
+
+  <div class="info">
+
+    <div class="check-in">
+      <div class="check-in-out">
+        <span>Entrada</span>
+        <span *ngIf="diasDesde[0] != null ;else
+          other_content">{{ diasDesde[0]
+          |
+          date: 'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="check-in-out">
+        <span>Salida</span>
+        <span *ngIf="diaSiguiente != null ;else
+          other_content">{{ diaSiguiente
+          |
+          date: 'dd/MM/yyyy' }}
+        </span>
+      </div>
+    </div>
+    <div class="dias">
+      <span class="cantidad-precio" *ngIf="cantidadDias != 0">{{cantidadDias}}</span><span
+        class="cantidad-noches" *ngIf="cantidadDias != 0">
+        {{texto}}</span>
+    </div>
+    <ng-template #other_content>-</ng-template>
+  </div>
+
+  <div
+    class="calendario">
+    <div class="contenedor-mes" *ngFor="let item of calendar |
+      paginador:primerMes; let i= index">
+      <!-- hay que hacer que el pipe del paginador devuelva el index para asignarselo a i -->
+      <div class="titulo"><button mat-button class="left-button bi
+          bi-chevron-left"
+          (click)="cambiarPrimerMes(-1)"
+          [disabled]="primerMes == 0" [style.visibility]="i == 1? 'hidden':
+          'visible'"><span
+            class="material-symbols-outlined">
+            arrow_back_ios
+          </span></button>
+        <h4> {{item[0].numeroMes | mes}} {{item[0].numeroAnio}}</h4>
+        <button mat-button class="right-button"
+          (click)="cambiarPrimerMes(1)"
+          [disabled]="primerMes == 11" [style.visibility]="i == 0? 'hidden':
+          'visible'"><span
+            class="material-symbols-outlined">
+            arrow_forward_ios
+          </span></button></div>
+      <ol>
+        <li class="day-name" *ngFor="let dia of dias">{{dia |
+          slice:0:3}}</li>
+        <li
+          *ngFor="let number of item; let first= first; let j= index"
+          (click)="selectDay(number, i,j)"
+          class="dia-numero"
+          [ngClass]="{'bloqueado': !number.disponibilidad, 'disponible':
+          number.disponibilidad, 'seleccionado':
+          number.seleccionado,'error':
+          (number.disponibilidad == false && number.seleccionado == true)}"
+          [style.gridColumnStart]="first? (number.indexNumeroSemana === 7 ?
+          0 : number.indexNumeroSemana + 1) : ''">{{number.numeroDia}}</li>
+      </ol>
+    </div>
+
+
+  </div>
+  <button class="borrar" (click)="borrarFechas()" mat-stroked-button
+    color="warn">Borrar fechas</button>
+
+
+</div>
+<div *ngIf="cantidadDias> 0" class="mat-mini-fab snackDias">
+  <span>{{cantidadDias}}</span>
+  <span
+    class="material-symbols-outlined">
+    bedtime
+  </span>
+</div>

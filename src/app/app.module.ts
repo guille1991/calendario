@@ -10,9 +10,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ReservaComponent } from './components/reserva/reserva.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { CalendarioComponent } from './components/calendario/calendario.component';
 
 @NgModule({
-  declarations: [AppComponent, MesPipe, PaginadorPipe, ReservaComponent],
+  declarations: [AppComponent, MesPipe, PaginadorPipe, ReservaComponent, CalendarioComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
