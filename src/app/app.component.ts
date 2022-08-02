@@ -31,9 +31,9 @@ export class AppComponent implements OnInit {
   cantidadDias: number = 0;
   diaSiguiente: any | null;
   texto: string = '';
-  // diasElegidos: { desde: any | null; hasta: any | null } = {
-  //   desde: null,
-  //   hasta: null,
+  // diasElegidos: { desde: [any | null, number[]]; hasta: [any | null, number[]] } = {
+  //   desde: [null, []],
+  //   hasta: [null, []],
   // };
   diasDesde: [any | null, number[]] = [null, []];
   diasHasta: [any | null, number[]] = [null, []];
@@ -365,5 +365,15 @@ export class AppComponent implements OnInit {
       return;
     }
     this.primerMes = this.primerMes + valor;
+  }
+
+  borrarFechas() {
+    this.cleanCalendar();
+    this.diasDesde = [null, []];
+    this.diasHasta = [null, []];
+    this.datesService.setDias({
+      desde: this.diasDesde,
+      hasta: this.diasHasta,
+    });
   }
 }
