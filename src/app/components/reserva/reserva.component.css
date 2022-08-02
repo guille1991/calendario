@@ -4,7 +4,7 @@
   border-radius: 1rem;
   /* background-color: aliceblue; */
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  padding: 1rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
 }
@@ -16,6 +16,10 @@ mat-divider {
 .precio__noche {
   align-self: start;
   margin-bottom: 2rem;
+}
+
+.precio__noche > span:nth-child(2) {
+  font-size: 0.9rem;
 }
 
 .precio__noche > span:nth-child(1) {
@@ -31,11 +35,17 @@ mat-divider {
   grid-template-columns: 1fr 3fr;
   grid-template-rows: 1fr 1fr;
   row-gap: 1rem;
+  align-items: center;
 }
 
 .fechas > span:nth-child(1),
 .fechas > span:nth-child(3) {
   font-weight: 500;
+}
+
+.fechas > span:nth-child(2),
+.fechas > span:nth-child(4) {
+  font-size: 0.9rem;
 }
 
 .reservar__btn {
