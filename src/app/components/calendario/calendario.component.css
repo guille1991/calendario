@@ -84,7 +84,9 @@ div {
 }
 
 .seleccionado {
-  background-color: rgb(105, 238, 105);
+  border-radius: 40px;
+  background-color: #3f51b5;
+  color: white;
 }
 
 .error {
