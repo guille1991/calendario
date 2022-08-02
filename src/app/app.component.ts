@@ -102,6 +102,7 @@ export class AppComponent implements OnInit {
     if (this.diasDesde[0] == null) {
       dia.seleccionado = true;
       this.diasDesde = [dayjs(dia.date), indexMesDia];
+      this.diasHasta = [dayjs(dia.date), indexMesDia];
       this.datesService.setDias({
         desde: this.diasDesde,
         hasta: this.diasHasta,
@@ -144,7 +145,7 @@ export class AppComponent implements OnInit {
       if (!dayjs(dia.date).isSame(dayjs(this.diasHasta[0]))) {
         dia.seleccionado = true;
         this.diasDesde = [dayjs(dia.date), indexMesDia];
-        this.diasHasta = [null, []];
+        this.diasHasta = [dayjs(dia.date), indexMesDia];
         this.datesService.setDias({
           desde: this.diasDesde,
           hasta: this.diasHasta,

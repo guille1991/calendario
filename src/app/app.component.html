@@ -1,13 +1,15 @@
- <div class="component" style="display:flex; justify-content: center">
-  <div style="display:flex; flex-direction:column; background-color:
-    aliceblue; padding: 1rem; border-radius: 1rem; margin-bottom: 3rem;">
-    <div class="info">
+ <div style="display:flex;justify-content: center;flex-wrap: wrap;">
+  <app-reserva></app-reserva>
+  <div class="component" style="display:flex; justify-content: center">
+    <div style="display:flex; flex-direction:column; background-color:
+      aliceblue; padding: 1rem; border-radius: 1rem; margin-bottom: 3rem;">
+      <div class="info">
 
-      <div class="dias">
-        <span class="cantidad-precio" *ngIf="cantidadDias != 0">{{cantidadDias}}</span><span
-          class="cantidad-noches" *ngIf="cantidadDias != 0">
-          {{texto}}</span>
-        <!-- <span *ngIf="diasHasta[0]">Desde el mediodia del {{ diasDesde[0]
+        <div class="dias">
+          <span class="cantidad-precio" *ngIf="cantidadDias != 0">{{cantidadDias}}</span><span
+            class="cantidad-noches" *ngIf="cantidadDias != 0">
+            {{texto}}</span>
+          <!-- <span *ngIf="diasHasta[0]">Desde el mediodia del {{ diasDesde[0]
           |
           date: 'dd/MM/yyyy' }}
 
@@ -15,82 +17,83 @@
           | date:
           'dd/MM/yyyy'}}
           , </span> -->
-      </div>
-
-
-
-
-      <div class="check-in-and-out">
-        <div class="check-in-out">
-          <span style="font-weight: 800; width: 80px;">Entrada</span>
-          <span style="font-size:0.875rem" *ngIf="diasHasta[0] ;else
-            other_content">{{ diasDesde[0]
-            |
-            date: 'dd/MM/yyyy' }}</span>
         </div>
-        <div class="check-in-out" style="margin-left:1rem;">
-          <span
-            style="font-weight: 800;width: 80px;">Salida</span>
-          <span style="font-size:0.875rem" *ngIf="diasHasta[0] ;else
-            other_content">{{ diaSiguiente
-            |
-            date: 'dd/MM/yyyy' }}
-          </span>
+
+
+
+
+        <div class="check-in-and-out">
+          <div class="check-in-out">
+            <span style="font-weight: 800; width: 80px;">Entrada</span>
+            <span style="font-size:0.875rem" *ngIf="diasHasta[0] ;else
+              other_content">{{ diasDesde[0]
+              |
+              date: 'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="check-in-out" style="margin-left:1rem;">
+            <span
+              style="font-weight: 800;width: 80px;">Salida</span>
+            <span style="font-size:0.875rem" *ngIf="diasHasta[0] ;else
+              other_content">{{ diaSiguiente
+              |
+              date: 'dd/MM/yyyy' }}
+            </span>
+          </div>
         </div>
-      </div>
-      <ng-template #other_content>-</ng-template>
-    </div>
-
-    <div
-      class="calendario">
-      <div class="contenedor-mes" *ngFor="let item of calendar |
-        paginador:primerMes; let i= index">
-        <!-- hay que hacer que el pipe del paginador devuelva el index para asignarselo a i -->
-        <div class="titulo"><button mat-button class="left-button bi
-            bi-chevron-left"
-            (click)="changePrimerMes(-1)"
-            [disabled]="primerMes == 0" [style.visibility]="i == 1? 'hidden':
-            'visible'"><span
-              class="material-symbols-outlined">
-              arrow_back_ios
-            </span></button>
-          <h4> {{item[0].numeroMes | mes}} {{item[0].numeroAnio}}</h4>
-          <button mat-button class="right-button"
-            (click)="changePrimerMes(1)"
-            [disabled]="primerMes == 11" [style.visibility]="i == 0? 'hidden':
-            'visible'"><span
-              class="material-symbols-outlined">
-              arrow_forward_ios
-            </span></button></div>
-        <ol>
-          <li class="day-name" *ngFor="let dia of dias">{{dia |
-            slice:0:3}}</li>
-          <li
-            *ngFor="let number of item; let first= first; let j= index"
-            (click)="selectDay(number, i,j)"
-            class="dia-numero"
-            [ngClass]="{'bloqueado': !number.disponibilidad, 'disponible':
-            number.disponibilidad, 'seleccionado': number.seleccionado,'error':
-            (number.disponibilidad == false && number.seleccionado == true)}"
-            [style.gridColumnStart]="first? (number.indexNumeroSemana === 7 ?
-            0 : number.indexNumeroSemana + 1) : ''">{{number.numeroDia}}</li>
-        </ol>
+        <ng-template #other_content>-</ng-template>
       </div>
 
+      <div
+        class="calendario">
+        <div class="contenedor-mes" *ngFor="let item of calendar |
+          paginador:primerMes; let i= index">
+          <!-- hay que hacer que el pipe del paginador devuelva el index para asignarselo a i -->
+          <div class="titulo"><button mat-button class="left-button bi
+              bi-chevron-left"
+              (click)="changePrimerMes(-1)"
+              [disabled]="primerMes == 0" [style.visibility]="i == 1? 'hidden':
+              'visible'"><span
+                class="material-symbols-outlined">
+                arrow_back_ios
+              </span></button>
+            <h4> {{item[0].numeroMes | mes}} {{item[0].numeroAnio}}</h4>
+            <button mat-button class="right-button"
+              (click)="changePrimerMes(1)"
+              [disabled]="primerMes == 11" [style.visibility]="i == 0? 'hidden':
+              'visible'"><span
+                class="material-symbols-outlined">
+                arrow_forward_ios
+              </span></button></div>
+          <ol>
+            <li class="day-name" *ngFor="let dia of dias">{{dia |
+              slice:0:3}}</li>
+            <li
+              *ngFor="let number of item; let first= first; let j= index"
+              (click)="selectDay(number, i,j)"
+              class="dia-numero"
+              [ngClass]="{'bloqueado': !number.disponibilidad, 'disponible':
+              number.disponibilidad, 'seleccionado':
+              number.seleccionado,'error':
+              (number.disponibilidad == false && number.seleccionado == true)}"
+              [style.gridColumnStart]="first? (number.indexNumeroSemana === 7 ?
+              0 : number.indexNumeroSemana + 1) : ''">{{number.numeroDia}}</li>
+          </ol>
+        </div>
 
+
+      </div>
+      <button class="borrar" (click)="borrarFechas()" mat-stroked-button
+        color="warn">Borrar fechas</button>
     </div>
-    <button class="borrar" (click)="borrarFechas()" mat-stroked-button
-      color="warn">Borrar fechas</button>
-  </div>
-  <div *ngIf="cantidadDias> 0" class="mat-mini-fab snackDias">
-    <span
-      style="margin-top: 3px;">{{cantidadDias}}</span>
-    <span
-      class="material-symbols-outlined">
-      bedtime
-    </span>
-  </div>
-  <!-- <div class="mat-mini-fab snackFechas" *ngIf="diasDesde[0]">
+    <div *ngIf="cantidadDias> 0" class="mat-mini-fab snackDias">
+      <span
+        style="margin-top: 3px;">{{cantidadDias}}</span>
+      <span
+        class="material-symbols-outlined">
+        bedtime
+      </span>
+    </div>
+    <!-- <div class="mat-mini-fab snackFechas" *ngIf="diasDesde[0]">
     <span style="margin: 3px;"
       class="material-symbols-outlined">
       input
@@ -108,4 +111,5 @@
         output
       </span></div>
   </div> -->
+  </div>
 </div>
